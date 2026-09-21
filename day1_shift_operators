@@ -1,0 +1,19 @@
+module shiftoperator;
+  reg [3:0] a;
+  reg [3:0] shift_logic_right;
+
+  initial
+    begin
+      a = 4'b1011;
+      shift_logic_right = a >> 1;
+      $display("Shifted value: %b", shift_logic_right);
+      shift_logic_right = a << 1;
+      $display("Shifted value: %b",shift_logic_left);
+    end
+endmodule
+// output of module shiftoperator
+      KERNEL: ASDB file was created in location /home/runner/dataset.asdb
+# KERNEL: 0011
+# KERNEL: 1100
+# KERNEL: Simulation has finished. There are no more test vectors to simulate.
+# VSIM: Simulation has finished.
