@@ -1,0 +1,147 @@
+PART 1: SOURCE CODE TESTBENCH
+PART 2: OUTPUT THROUGH SIMULATOR
+    ||IMPORTANT NOTICE IN EDA PLAYGROUND THE EQUALITY OPERATORS AND CASE EQUALITY OPERATORS ARE NOT DIFFER EQUALITY OPERATORS GIVING 0 AND 1 FOR DONT CARE 
+  BINARY NUMBERS||
+PART1 :
+module operator;
+  reg[3:0] a;
+  reg[3:0] b;
+  reg gt;
+  reg lt;
+  reg gtoeq;
+  reg ltoeq;
+  
+  reg eq;
+  reg neq;
+  reg ceq;
+  reg nceq;
+  
+  reg[3:0] bnot;
+  reg[3:0] band;
+  reg[3:0] bor;
+  reg[3:0] bxor;
+  reg[3:0] bxnor;
+  
+  reg red_and;
+  reg red_or;
+  reg red_nor;
+  reg red_nand;
+  reg red_xor;
+  reg red_xnor;
+  initial
+    begin
+                                       //( RELATIONAL OPERATORS)  //
+      a= 4'b1011;
+      b= 4'b1101;
+      gt = a>b;
+      $display("the value of gt is %b",gt);
+      lt = a<b;
+      $display("the value of lt is %b",lt);
+      gtoeq = a>=b;
+      $display("the value of gtoeq is %b",gtoeq);
+      ltoeq = a<=b;
+      $display("the value of ltoeq is %b",ltoeq);
+      
+      a= 4'b101x;
+      b= 4'b1011;
+      gt = a>b;
+      $display("the value of gt is %b",gt);
+      lt = a<b;
+      $display("the value of lt is %b",lt);
+      gtoeq = a>=b;
+      $display("the value of gtoeq is %b",gtoeq);
+      ltoeq = a<=b;
+      $display("the value of ltoeq is %b",ltoeq);
+
+                                      // (EQUALITY OPERATORS)//
+      
+      a= 4'b101x;
+      b= 4'b1101;
+      eq = a==b;
+      $display("the value of eq is %b",eq);
+      neq = a!=b ;
+      $display("the value of neq is %b",neq);
+       ceq = a===b;                / CASE EQUALITY OPERATORS/
+      $display("the value of ceq is %b",ceq);
+      nceq = a!==b;                /CASE EQUALITY OPERATORS/
+      $display("the value of nceq is %b",nceq);
+
+                               //BITWISE OPERATORS//
+      a= 4'b1011;
+      b= 4'b1101;
+      bnot = ~a;
+      $display("the value of bnot is %b",bnot);
+      band = a&b ;
+      $display("the value of band is %b",band);
+       bor = a|b;
+      $display("the value of bor is %b",bor);
+      bxor = a^b;
+      $display("the value of bxor is %b",bxor);
+      bxnor = a~^b;
+      $display("the value of bxnor is %b",bxnor);
+      
+      a= 4'bx01x;
+      b= 4'b110x;
+      bnot = ~a;
+      $display("the value of bnot is %b",bnot);
+      band = a&b ;
+      $display("the value of band is %b",band);
+       bor = a|b;
+      $display("the value of bor is %b",bor);
+      bxor = a^b;
+      $display("the value of bxor is %b",bxor);
+      bxnor = a~^b;
+      $display("the value of bxnor is %b",bxnor);
+                             // REDUCTION OPERATORS//
+      a= 4'b1011;
+      red_and= &a;
+      $display("the value of red_and is %b",red_and);
+      red_or = |a ;
+      $display("the value of red_or is %b",red_or);
+       red_nand = ~&a;
+      $display("the value of red_nand is %b",red_nand);
+       red_nor = ~|a;
+      $display("the value of red_nor is %b",red_nor);
+      red_xor = ^a;
+      $display("the value of red_xor is %b",red_xor);
+      red_xnor = ~^a;
+      $display("the value of red_xnor is %b",red_xnor);      
+    end
+endmodule
+
+      PART:2
+                // OUTPUTS OF THE SOURCE CODE//
+      # KERNEL: ASDB file was created in location /home/runner/dataset.asdb
+# KERNEL: the value of gt is 0
+# KERNEL: the value of lt is 1
+# KERNEL: the value of gtoeq is 0
+# KERNEL: the value of ltoeq is 1
+# KERNEL: the value of gt is x
+# KERNEL: the value of lt is x
+# KERNEL: the value of gtoeq is x
+# KERNEL: the value of ltoeq is x
+# KERNEL: the value of eq is 0
+# KERNEL: the value of neq is 1
+# KERNEL: the value of ceq is 0
+# KERNEL: the value of nceq is 1
+# KERNEL: the value of bnot is 0100
+# KERNEL: the value of band is 1001
+# KERNEL: the value of bor is 1111
+# KERNEL: the value of bxor is 0110
+# KERNEL: the value of bxnor is 1001
+# KERNEL: the value of bnot is x10x
+# KERNEL: the value of band is x00x
+# KERNEL: the value of bor is 111x
+# KERNEL: the value of bxor is x11x
+# KERNEL: the value of bxnor is x00x
+# KERNEL: the value of red_and is 0
+# KERNEL: the value of red_or is 1
+# KERNEL: the value of red_nand is 1
+# KERNEL: the value of red_nor is 0
+# KERNEL: the value of red_xor is 1
+# KERNEL: the value of red_xnor is 0
+
+
+
+
+      
