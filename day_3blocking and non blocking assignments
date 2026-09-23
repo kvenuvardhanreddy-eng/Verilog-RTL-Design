@@ -1,0 +1,119 @@
+In Verilog, the correct usage of blocking and non-blocking  operators is crucial for accurately modeling hardware. Choosing the wrong operator leads to
+  simulation-synthesis mismatches an race conditions
+  (1). BLOCKING ASSIGNMENT:
+  * Denoted with '='.
+  * The assignment will be written in the always or initial block inside the behavioural modeling where the statements are executed or compiled by the computer
+    sequentially.
+  Example: {
+             always
+               begin
+                 a=0;
+                 b=1;
+  Here the both execute sequentially at time t=0 . Where the left hand side variable a and b must be reg data type.
+    Now we will talk about some stuff about time delay:
+  (i).Inter Assignment time delay in Blocking Assignment:
+   For example we take 
+     always
+            begin              #n is represented time delay in inter with which it represented before the variable
+              #1 a=0;
+              #2 b=1;
+    First meaning of the inter delay is the signal is passed with n time delay into the variable to store before execution.
+    Now in the blocking assignment the method is the compiler go to next part if and only if before statement is executed.
+
+    By taking the above example for a =0 it takes 1ns(here i represent every thing in nano sec).For the execution of b=1 first you have to see the compiler will come 
+    down to b after 1ns and when b=1 is 1+2= 3ns.
+(ii).Intra Assignment time delay in Blocking Assignment:
+    For example we take
+      always@(*)
+         begin
+        a = #1 0;
+        b = #2 1;
+    the difference in the intra is the signal is not delay but the gate execution time or storing time in reg a has been delayed
+    But we take the blocking assignment result is same that it block up to execution of a and a is executed 1ns and b will be executed in 3ns.
+
+    (2).NON-BLOCKING ASSIGNMENT:
+    * Denoted with '<=".
+    * Unlike the blocking assignment here the statements will be executed parallely.
+    Example:
+    Example: {
+             always@(*)
+               begin
+                 a<=0;
+                 b<=1;
+  }
+    Both will execute parallely at t=0.
+     (i) Inter assignment delay:
+   For example we take 
+     always
+            begin              #n is represented time delay in inter with which it represented before the variable
+              #1 a<=0;
+              #2 b<=1;
+     Here the signal started at t=1ns it will not wait for execution of a instead of it will do parallely the execution of b where time of execution of b is 
+     1+2 = 3ns. and a is 1ns.
+     (ii) Intra assignment delay:
+   For example we take 
+     always
+            begin              #n is represented time delay in inter with which it represented before the assigning value.
+               a<=#1 0;
+               b<=#2 1;
+     Here the signal started at t=0ns and the gate execution time is delayed by 1ns it will not wait for execution of a instead of it will do 
+     parallely the execution of b where time of execution of b is  2ns and a is 1ns.
+
+     Now we can do some problems on these stuff.(Final push):
+     1. let take 
+        always @ (*) 
+           begin
+           a=0;
+           #5 b= 1;
+              c=0;
+            #2 d=1;
+    end 
+      Here updation of a is t = 0ns.
+      Here updation of b is t = 5ns.
+      Here updation of c is t = 5ns.
+      Here updation of d is t = 7ns.
+      1. let take 
+        always @ (*) 
+           begin
+           a=0;
+           #5 b= 1;
+              c=0;
+            #2 d=1;
+    end 
+      Here updation of a is t = 0ns.
+      Here updation of b is t = 5ns.
+      Here updation of c is t = 5ns.
+      Here updation of d is t = 7ns.
+       2. let take 
+        always @ (*) 
+           begin
+           a<= 1;
+           b<=#2 0;
+           c=#3 0;
+           d<= #5 0;
+              e = #6 1;
+      end 
+      Here updation of a is t = 0ns.
+      Here updation of b is t = 2ns.
+      Here updation of c is t = 3ns.
+      Here updation of d is t = 8ns.
+      Here updation of e is t = 9ns.
+      3. let take 
+        always @ (*) 
+           begin
+           #2 a<= 1;
+           #3 b<= #1 0;
+           #2 c= #2 1;
+           #4 d =0;
+     
+      Here updation of c is t =(2+3+2+2) is 9ns.
+        NOTE : NO MATTER THERE IS BLOCKING OR NON BLOCKING THERE WILL INTER DELAY THEN ALL WILL BE ADDED.
+      
+     
+     
+     
+    
+    
+       
+  
+  
