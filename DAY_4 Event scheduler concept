@@ -1,0 +1,114 @@
+🚀 Day 4 / 100 Days of RTL & Verilog Challenge
+Today I explored the mechanics behind the Verilog Stratified Event Queue and analyzed how execution regions affect simulation behavior across 8 core code scenarios! ⚙️
+⚙️ Key Event Regions:
+🔹 Active Region: Handles blocking assignments (=), RHS evaluation of non-blocking (<=), continuous assignments, and $display.
+🔹 Inactive Region: Handles #0 delays.
+🔹 NBA Region: Updates LHS values for non-blocking assignments (<=).
+🔹 Postponed Region: Reads final settled values using $strobe / $monitor.
+
+# 🚀 Verilog Stratified Event Queue & Execution Cases
+
+When a Verilog simulator executes code at any specific time step, it evaluates and processes statements through distinct event regions to eliminate race conditions and enforce deterministic hardware modeling:
+
+---
+
+## 🏗️ 1. Stratified Event Queue Overview
+
+C
+🔵 Active Region (With Detailed Subparts)
+
+ * The Active Region handles all immediate evaluations, blocking updates, and procedural execution.
+   Events in this region execute in an arbitrary order within the current time step.
+*   **Blocking Assignment Execution:** Immediate evaluation and LHS updating for blocking statements (`=`).
+*   **RHS Evaluation of Non-Blocking Assignments:** Computing expressions on the right-hand side of non-blocking statements (`<=`). *(LHS updates are deferred)*.
+*   **Continuous Assignment Evaluation:** Evaluating `assign` statements whenever any signal on their RHS changes.
+*   **System Task Execution:** Executing system display tasks like `$display` and `$write`.
+*   **Instance Input/Output Updates:** Propagating signal updates across module boundaries and primitive pins.
+
+🟡 Inactive Region
+
+*   Processes `#0` procedural delay assignments.
+*   Execution is deferred until **all** current Active events are completely exhausted.
+
+🟢 NBA (Non-Blocking Assignment) 
+
+*   Updates the left-hand side (LHS) of all non-blocking assignments (`<=`).
+*   Uses the exact RHS values that were previously evaluated and captured during the **Active Region**.
+
+
+🔴 Postponed Region
+
+*   Executes read-only system tasks like `$strobe` and `$monitor`.
+*   This happens **after** all signals and assignments have completely settled at the current time step.
+</details>
+
+---
+
+## 🧪 2. Detailed Breakdown of All 8 Simulation Cases
+
+*Assuming variable `a` starts uninitialized as `4'bxxxx` at time `t = 0`.*
+
+=> Discussion on the cases
+module example
+initial
+    begin
+
+Case 1:
+a = 4'b0010;                             
+$display("the value of a is %b", a);
+Output: the value of a is 0010
+// Here the blocking assignment execute at t=0 and display the value of a as 0010 at t=0.
+
+Case 2:
+$display("the value of a is %b", a); 
+a = 4'b0010;                             
+Output: the value of a is xxxx
+// Here the display statement is executed first so a is printed default or previous value xxxx.
+
+Case3:
+a <= 4'b0010;                             
+$display("the value of a is %b", a);
+ Output: the value of a is xxxx
+// Here the display statement execute parallely with before statement in non blocking assignment so
+a is a default value.
+
+Case4:
+$display("the value of a is %b", a);
+a <= 4'b0010; 
+ Output: the value of a is xxxx
+// Here the display statement execute parallely with before statement in non blocking assignment so
+a is a default value.
+
+Case5:
+a = 4'b0010;
+#1;
+$display("the value of a is %b", a);
+Output: the value of a is 0010
+// Here the assigning of a will be done at t=0 and inter delay halt display statement for t=1 so that 
+the value of a is 0010.
+
+
+               || FOR THE BELOW CASES YOU CAN GIVE REASONS TO ME ||
+{
+Case6:
+a <= 4'b0010;
+#1;
+$display("the value of a is %b", a);
+Output: the value of a is 0010
+
+
+Case7:
+a <= #1 4'b0010;
+$display("the value of a is %b", a);
+ Output: the value of a is xxxx
+
+
+Case8:
+a = #1 4'b0010;
+$display("the value of a is %b", a);
+ Output: the value of a is 0010
+}
+
+
+
+
